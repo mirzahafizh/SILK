@@ -238,57 +238,76 @@
                             </td>
 
                             {{-- AKSI --}}
-                            <td class="px-4 py-4">
-                                @if($laporan->status === 'menunggu_verifikasi')
+<td class="px-4 py-4">
+    <div class="min-w-[180px] space-y-2">
 
-                                    <form
-                                        action="{{ route('admin.karyawan.verifikasi', $laporan->id) }}"
-                                        method="POST"
-                                        class="min-w-[180px] space-y-2">
+        {{-- DETAIL --}}
+        <a href="{{ route('admin.karyawan.laporan.show', $laporan->id) }}"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700">
+            <i class="fa-solid fa-eye"></i>
+            Lihat Detail
+        </a>
 
-                                        @csrf
-                                        @method('PATCH')
+        @if($laporan->status === 'menunggu_verifikasi')
 
-                                        <textarea
-                                            name="catatan"
-                                            rows="2"
-                                            placeholder="Catatan jika perlu revisi..."
-                                            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:border-poltekba focus:outline-none focus:ring-1 focus:ring-poltekba"></textarea>
+            {{-- SETUJUI --}}
+            <form
+                action="{{ route('admin.karyawan.verifikasi', $laporan->id) }}"
+                method="POST"
+                onsubmit="return confirm('Apakah Anda yakin ingin menyetujui laporan ini?')">
 
-                                        <div class="flex flex-col gap-1.5">
+                @csrf
+                @method('PATCH')
 
-                                            <button
-                                                type="submit"
-                                                name="status"
-                                                value="disetujui"
-                                                onclick="return confirm('Apakah Anda yakin ingin menyetujui laporan ini?')"
-                                                class="inline-flex items-center justify-center gap-1 rounded-lg bg-green-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-green-700">
+                <input type="hidden" name="status" value="disetujui">
 
-                                                <i class="fa-solid fa-check"></i>
-                                                Setujui
-                                            </button>
+                <button type="submit"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-green-700">
+                    <i class="fa-solid fa-check"></i>
+                    Setujui
+                </button>
+            </form>
 
-                                            <button
-                                                type="submit"
-                                                name="status"
-                                                value="perlu_revisi"
-                                                onclick="return confirm('Apakah Anda yakin meminta revisi laporan ini?')"
-                                                class="inline-flex items-center justify-center gap-1 rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-red-700">
+            {{-- REVISI --}}
+            <form
+                action="{{ route('admin.karyawan.verifikasi', $laporan->id) }}"
+                method="POST"
+                class="space-y-2">
 
-                                                <i class="fa-solid fa-rotate-left"></i>
-                                                Minta Revisi
-                                            </button>
+                @csrf
+                @method('PATCH')
 
-                                        </div>
-                                    </form>
+                <input type="hidden" name="status" value="perlu_revisi">
 
-                                @else
-                                    <span class="text-xs text-slate-400">
-                                        Sudah diverifikasi
-                                    </span>
-                                @endif
-                            </td>
+                <textarea
+                    name="catatan"
+                    rows="3"
+                    required
+                    maxlength="2000"
+                    placeholder="Tuliskan catatan revisi..."
+                    class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"></textarea>
 
+                <button
+                    type="submit"
+                    onclick="return confirm('Apakah Anda yakin ingin meminta revisi laporan ini?')"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-red-700">
+
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Minta Revisi
+                </button>
+            </form>
+
+        @else
+
+            <div class="rounded-lg bg-slate-100 px-3 py-2 text-center text-xs font-medium text-slate-500">
+                <i class="fa-solid fa-circle-check mr-1"></i>
+                Sudah diverifikasi
+            </div>
+
+        @endif
+
+    </div>
+</td>
                         </tr>
 
                     @empty

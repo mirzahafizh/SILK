@@ -124,7 +124,9 @@ Route::middleware(['auth', 'role:admin'])
                 'month' => '[0-9]{1,2}',
             ])
             ->name('karyawan.laporan');
-
+Route::get('/karyawan/laporan/{laporan}/detail',
+    [AdminKaryawanController::class, 'showLaporan']
+)->name('karyawan.laporan.show');
         /*
         |--------------------------------------------------------------------------
         | EXPORT LAPORAN

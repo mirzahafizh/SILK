@@ -7,7 +7,7 @@
 
     {{-- Header --}}
     <div>
-        <a href="{{ url()->previous() }}"
+        <a href="{{ route('laporan.index') }}"
             class="inline-flex items-center gap-2 text-sm font-semibold text-poltekba hover:underline transition">
             <i class="fa-solid fa-arrow-left"></i>
             Kembali

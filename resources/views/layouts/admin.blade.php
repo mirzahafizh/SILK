@@ -7,7 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Admin SILK')</title>
-
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-poltekba.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-poltekba.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -53,8 +54,10 @@
 
         <div class="px-6 py-6 border-b border-white/10">
             <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center">
-                    <i class="fa-solid fa-clipboard-check text-xl"></i>
+                <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center p-1.5">
+                    <img src="{{ asset('images/logo-poltekba.png') }}"
+                        alt="Logo Politeknik Negeri Balikpapan"
+                        class="w-full h-full object-contain">
                 </div>
 
                 <div>

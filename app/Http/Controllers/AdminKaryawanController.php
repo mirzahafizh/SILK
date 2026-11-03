@@ -11,19 +11,54 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminKaryawanController extends Controller
 {
+
+public function showLaporan(Laporan $laporan)
+{
+    $karyawan = User::findOrFail($laporan->user_id);
+
+    return view('admin.karyawan.show', compact(
+        'laporan',
+        'karyawan'
+    ));
+}
     /**
      * Menampilkan seluruh karyawan PJLP.
      */
-    public function index()
-    {
-        $karyawan = User::query()
-            ->where('role', 'pjlp')
-            ->withCount('laporans')
-            ->orderBy('name', 'asc')
-            ->paginate(15);
+public function index(Request $request)
+{
+    $query = User::query()
+        ->where('role', 'pjlp')
+        ->withCount('laporans');
 
-        return view('admin.karyawan.index', compact('karyawan'));
+    // Pencarian seluruh data pegawai berdasarkan nama atau NIP
+    if ($request->filled('search')) {
+        $keyword = $request->search;
+
+        $query->where(function ($q) use ($keyword) {
+            $q->where('name', 'LIKE', "%{$keyword}%")
+              ->orWhere('nip', 'LIKE', "%{$keyword}%");
+        });
     }
+
+    // Statistik mengikuti hasil pencarian, bukan hanya halaman aktif
+    $totalPegawai = (clone $query)->count();
+
+    $totalLaporan = (clone $query)
+        ->get()
+        ->sum('laporans_count');
+
+    // Pagination tetap mempertahankan kata kunci pencarian
+    $karyawan = $query
+        ->orderBy('name', 'asc')
+        ->paginate(10)
+        ->withQueryString();
+
+    return view('admin.karyawan.index', compact(
+        'karyawan',
+        'totalPegawai',
+        'totalLaporan'
+    ));
+}
 
     /**
      * Menampilkan daftar bulan laporan milik karyawan.
